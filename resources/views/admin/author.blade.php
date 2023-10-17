@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('header', 'Catalog')
+@section('header', 'Author')
 
 @section('content')
 <div class="container">
@@ -7,7 +7,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                  <a href="{{ url('catalogs/create') }}" class="btn btn-primary">Create New Catalog</a>
+                  <a href="{{ url('authors/create') }}" class="btn btn-primary">Create New Author</a>
                 </div>
                 <div class="card-body">
                   <table class="table table-bordered">
@@ -15,21 +15,23 @@
                       <tr>
                         <th style="width: 10px">No.</th>
                         <th class="text-center">Name</th>
-                        <th class="text-center">Total Book</th>
-                        <th class="text-center">Created at</th>
-                        <th class="text-center" style="width: 200px">Action</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Phone Number</th>
+                        <th class="text-center">Address</th>
+                        <th style="width: 200px" class="text-center">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                        @foreach ($catalogs as $key => $catalog)
+                        @foreach ($authors as $key => $author)
                         <tr>
                             <td class="text-center">{{ $key+1 }}.</td>
-                            <td class="text-center">{{ $catalog->name }}</td>
-                            <td class="text-center">{{ count($catalog->books) }} Book</td>
-                            <td class="text-center">{{ date('d M Y - H:i:s', strtotime($catalog->created_at)) }}</td>
+                            <td class="text-center">{{ $author->name }}</td>
+                            <td class="text-center">{{ $author->email }}</td>
+                            <td class="text-center">{{ $author->phone_number }}</td>
+                            <td class="text-center">{{ $author->address }}</td>
                             <td class="text-center">
-                                <form action=" {{ url('catalogs', ['id' => $catalog->id]) }} " method="post">
-                                    <a href="{{ url('catalogs/'.$catalog->id.'/edit') }}" class="btn btn-warning">Edit</a>
+                                <form action=" {{ url('authors', ['id' => $author->id]) }} " method="post">
+                                    <a href="{{ url('authors/'.$author->id.'/edit') }}" class="btn btn-warning">Edit</a>
                                     <input class="btn btn-danger" type="submit" value="Delete" onclick="return confirm('Are you sure ?')">
                                 @method('delete')
                                 @csrf

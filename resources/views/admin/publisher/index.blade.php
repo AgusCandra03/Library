@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('header', 'Catalog')
+@section('header', 'Publisher')
 
 @section('content')
 <div class="container">
@@ -7,7 +7,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                  <a href="{{ url('catalogs/create') }}" class="btn btn-primary">Create New Catalog</a>
+                  <a href="{{ url('publishers/create') }}" class="btn btn-primary">Create New Publisher</a>
                 </div>
                 <div class="card-body">
                   <table class="table table-bordered">
@@ -15,21 +15,23 @@
                       <tr>
                         <th style="width: 10px">No.</th>
                         <th class="text-center">Name</th>
-                        <th class="text-center">Total Book</th>
-                        <th class="text-center">Created at</th>
-                        <th class="text-center" style="width: 200px">Action</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Phone Number</th>
+                        <th class="text-center">Address</th>
+                        <th style="width: 200px" class="text-center">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                        @foreach ($catalogs as $key => $catalog)
+                        @foreach ($publishers as $key => $publisher)
                         <tr>
                             <td class="text-center">{{ $key+1 }}.</td>
-                            <td class="text-center">{{ $catalog->name }}</td>
-                            <td class="text-center">{{ count($catalog->books) }} Book</td>
-                            <td class="text-center">{{ date('d M Y - H:i:s', strtotime($catalog->created_at)) }}</td>
+                            <td class="text-center">{{ $publisher->name }}</td>
+                            <td class="text-center">{{ $publisher->email }}</td>
+                            <td class="text-center">{{ $publisher->phone_number }}</td>
+                            <td class="text-center">{{ $publisher->address }}</td>
                             <td class="text-center">
-                                <form action=" {{ url('catalogs', ['id' => $catalog->id]) }} " method="post">
-                                    <a href="{{ url('catalogs/'.$catalog->id.'/edit') }}" class="btn btn-warning">Edit</a>
+                                <form action=" {{ url('publishers', ['id' => $publisher->id]) }} " method="post">
+                                    <a href="{{ url('publishers/'.$publisher->id.'/edit') }}" class="btn btn-warning">Edit</a>
                                     <input class="btn btn-danger" type="submit" value="Delete" onclick="return confirm('Are you sure ?')">
                                 @method('delete')
                                 @csrf
