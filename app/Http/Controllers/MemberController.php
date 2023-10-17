@@ -12,7 +12,8 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        $member = Member::with('user')->get();
+        return view('admin.member.index');
     }
 
     /**

@@ -20,3 +20,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/catalogs', [App\Http\Controllers\CatalogController::class, 'index']);
+
+Route::resource('/members', App\Http\Controllers\MemberController::class);
+Route::resource('/catalogs', App\Http\Controllers\CatalogController::class);
+Route::resource('/publishers', App\Http\Controllers\PublisherController::class);
+Route::resource('/authors', App\Http\Controllers\AuthorController::class);
+Route::resource('/books', App\Http\Controllers\BookController::class);
+Route::resource('/transactions', App\Http\Controllers\TransactionController::class);

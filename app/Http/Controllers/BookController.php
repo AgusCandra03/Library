@@ -12,7 +12,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::with('publisher')->get();
+        return view('admin.book.index');
     }
 
     /**
