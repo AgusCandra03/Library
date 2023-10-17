@@ -7,9 +7,8 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Bordered Table</h3>
+                  <a href="{{ url('catalogs/create') }}" class="btn btn-primary">Create New Catalog</a>
                 </div>
-                <!-- /.card-header -->
                 <div class="card-body">
                   <table class="table table-bordered">
                     <thead>
@@ -18,6 +17,7 @@
                         <th class="text-center">Name</th>
                         <th class="text-center">Total Book</th>
                         <th class="text-center">Created at</th>
+                        <th class="text-center">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -27,6 +27,14 @@
                             <td class="text-center">{{ $catalog->name }}</td>
                             <td class="text-center">{{ count($catalog->books) }} Book</td>
                             <td class="text-center">{{ date('d M Y - H:i:s', strtotime($catalog->created_at)) }}</td>
+                            <td class="text-center">
+                                <form action=" {{ url('catalogs', ['id' => $catalog->id]) }} " method="post">
+                                    <a href="{{ url('catalogs/'.$catalog->id.'/edit') }}" class="btn btn-warning">Edit</a>
+                                    <input class="btn btn-danger" type="submit" value="Delete" onclick="return confirm('Are you sure ?')">
+                                @method('delete')
+                                @csrf
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
