@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.min.css')}}">
+  @yield('css')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -261,5 +262,10 @@
 <script src="{{ asset('assets/dist/js/adminlte.js') }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('assets/dist/js/pages/dashboard.js') }}"></script>
+{{-- CDN Vue JS --}}
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+{{-- CDN Axios JS --}}
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+@yield('js')
 </body>
 </html>
