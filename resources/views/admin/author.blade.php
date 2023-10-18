@@ -28,21 +28,6 @@
                         <th style="width: 200px" class="text-center">Action</th>
                       </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($authors as $key => $author)
-                        <tr>
-                            <td class="text-center">{{ $key+1 }}.</td>
-                            <td class="text-center">{{ $author->name }}</td>
-                            <td class="text-center">{{ $author->email }}</td>
-                            <td class="text-center">{{ $author->phone_number }}</td>
-                            <td class="text-center">{{ $author->address }}</td>
-                            <td class="text-center">
-                              <a href="#" @click="editData( {{ $author }} )" class="btn btn-warning">Edit</a>
-                              <a href="#" @click="deleteData( {{ $author->id }} )" class="btn btn-danger">Delete</a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
                   </table>
                 </div>
             </div>
@@ -112,42 +97,86 @@
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <script>
-$(function () {
-    $("#datatable").DataTable()
+var actionUrl = '{{ url('authors') }}';
+var apiUrl = '{{ url('api/authors') }}';
+// var columns = [
+//   {data: 'DT_RowIndex', class: 'text-center', orderable: true},
+//   {data: 'name', class: 'text-center', orderable: true},
+//   {data: 'email', class: 'text-center', orderable: true},
+//   {data: 'phone_number', class: 'text-center', orderable: true},
+//   {data: 'address', class: 'text-center', orderable: true},
+//   {data: 'date', class: 'text-center', orderable: true},
+//   {render: function (index, row, data, meta)
+//       {
+//           return `
+//               <a href="#" class="btn btn-warning btn-sm" onclick="controller.editData(event, ${meta.row})">Edit</a>
+//               <a class="btn btn-danger btn-sm" onclick="controller.deleteData(event, ${data.id})">Delete</a>
+//           `;
+//       }, orderable: false, width: '200px', class: 'text-center'
+//   },
+// ];
+
+
+var columns = [
+  {data: 'DT_RowIndex', class: 'text-center', orderable: true},
+  {data: 'name', class: 'text-center', orderable: true},
+  {data: 'email', class: 'text-center', orderable: true},
+  {data: 'phone_number', class: 'text-center', orderable: true},
+  {data: 'address', class: 'text-center', orderable: true},
+  {render: function (index, row, data, meta){
+    return `
+      <a href="#" class="btn btn-warning" onclick="controller.editData(event, ${meta.row})">Edit</a>
+      <a href="#" class="btn btn-danger" onclick="controller.deleteData(event, ${data.id})">Delete</a>
+      `;
+  }, orderable: false, width: '200px', class: 'text-center' },
+];
+
+  var controller = new Vue({
+    el: '#controller',
+    data: {
+      datas: [],
+      data: {},
+      actionUrl,
+      apiUrl,
+      editStatus: false,
+    },
+    mounted: function(){
+      this.datatable();
+    },
+    methods: {
+      datatable(){
+          const _this = this;
+          _this.table = $('#datatable').DataTable({
+              ajax:{
+                  url: apiUrl,
+                  type: 'GET',
+              },
+              columns
+          }).on('xhr', function(){
+              _this.datas = _this.table.ajax.json().data;
+          });
+      },
+      addData(){
+        this.data = {};
+        this.editStatus = false;
+        this.actionUrl = '{{ url('authors') }}';
+        $('#modal-default').modal();
+      },
+      editData(event, row){
+        this.data = this.datas[row];
+        this.editStatus = true;
+        this.actionUrl = '{{ url('authors') }}'+'/'+this.data.id;
+        $('#modal-default').modal();
+      },
+      deleteData(event, id){
+        this.actionUrl = '{{ url('authors') }}'+'/'+id;
+        if(confirm("Are you sure ?")){
+          axios.post(this.actionUrl, {_method: 'DELETE'}).then(response => {
+            location.reload();
+          });
+        }
+      }
+    }
   });
-
-  // var controller = new Vue({
-  //   el: '#controller',
-  //   data: {
-  //     data: {},
-  //     actionUrl: '{{ url('authors') }}',
-  //     editStatus: false,
-  //   },
-  //   mounted: function(){
-
-  //   },
-  //   methods: {
-  //     addData(){
-  //       this.data = {};
-  //       this.editStatus = false;
-  //       this.actionUrl = '{{ url('authors') }}';
-  //       $('#modal-default').modal();
-  //     },
-  //     editData(data){
-  //       this.data = data;
-  //       this.editStatus = true;
-  //       this.actionUrl = '{{ url('authors') }}'+'/'+data.id;
-  //       $('#modal-default').modal();
-  //     },
-  //     deleteData(id){
-  //       this.actionUrl = '{{ url('authors') }}'+'/'+id;
-  //       if(confirm("Are you sure ?")){
-  //         axios.post(this.actionUrl, {_method: 'DELETE'}).then(response => {
-  //           location.reload();
-  //         });
-  //       }
-  //     }
-  //   }
-  // });
 </script>
 @endsection
