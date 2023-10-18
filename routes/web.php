@@ -36,3 +36,4 @@ Route::resource('/books', App\Http\Controllers\BookController::class);
 Route::resource('/transactions', App\Http\Controllers\TransactionController::class);
 
 Route::get('/api/authors', [App\Http\Controllers\AuthorController::class, 'api']);
+Route::get('/api/books', [App\Http\Controllers\BookController::class, 'api']);

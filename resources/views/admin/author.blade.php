@@ -58,7 +58,7 @@
                       </div>
   
                       <div class="form-group">
-                        <label for="address">Phone Number</label>
+                        <label for="phone_number">Phone Number</label>
                         <input type="number" name="phone_number" class="form-control" id="phone_number" placeholder="Enter Phone Number" :value="data.phone_number" required>
                       </div>
   
@@ -99,23 +99,6 @@
 <script>
 var actionUrl = '{{ url('authors') }}';
 var apiUrl = '{{ url('api/authors') }}';
-// var columns = [
-//   {data: 'DT_RowIndex', class: 'text-center', orderable: true},
-//   {data: 'name', class: 'text-center', orderable: true},
-//   {data: 'email', class: 'text-center', orderable: true},
-//   {data: 'phone_number', class: 'text-center', orderable: true},
-//   {data: 'address', class: 'text-center', orderable: true},
-//   {data: 'date', class: 'text-center', orderable: true},
-//   {render: function (index, row, data, meta)
-//       {
-//           return `
-//               <a href="#" class="btn btn-warning btn-sm" onclick="controller.editData(event, ${meta.row})">Edit</a>
-//               <a class="btn btn-danger btn-sm" onclick="controller.deleteData(event, ${data.id})">Delete</a>
-//           `;
-//       }, orderable: false, width: '200px', class: 'text-center'
-//   },
-// ];
-
 
 var columns = [
   {data: 'DT_RowIndex', class: 'text-center', orderable: true},
