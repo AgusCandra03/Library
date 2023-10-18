@@ -17,8 +17,8 @@ class PublisherController extends Controller
      */
     public function index()
     {
-        $publishers = Publisher::with('books')->get();
-        return view('admin.publisher.index', compact('publishers'));
+        $publishers = Publisher::all();
+        return view('admin.publisher', compact('publishers'));
     }
 
     /**
@@ -26,7 +26,7 @@ class PublisherController extends Controller
      */
     public function create()
     {
-        return view('admin.publisher.create');
+        // return view('admin.publisher.create');
     }
 
     /**
@@ -59,7 +59,7 @@ class PublisherController extends Controller
      */
     public function edit(Publisher $publisher)
     {
-        return view('admin.publisher.edit', compact('publisher'));
+        // return view('admin.publisher.edit', compact('publisher'));
     }
 
     /**

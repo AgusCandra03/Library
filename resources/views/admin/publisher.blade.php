@@ -1,10 +1,7 @@
 @extends('layouts.admin')
-@section('header', 'Author')
+@section('header', 'Publisher')
 @section('css')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
-<link rel="stylesheet" href="{{asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
-<link rel="stylesheet" href="{{asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+    
 @endsection
 
 @section('content')
@@ -14,10 +11,10 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                  <a href="#" class="btn btn-primary" @click="addData()">Create New Author</a>
+                  <a href="#" class="btn btn-primary" @click="addData()">Create New Publisher</a>
                 </div>
                 <div class="card-body">
-                  <table id="datatable" class="table table-bordered">
+                  <table class="table table-bordered">
                     <thead>
                       <tr>
                         <th style="width: 10px">No.</th>
@@ -29,16 +26,16 @@
                       </tr>
                     </thead>
                     <tbody>
-                        @foreach ($authors as $key => $author)
+                        @foreach ($publishers as $key => $publisher)
                         <tr>
                             <td class="text-center">{{ $key+1 }}.</td>
-                            <td class="text-center">{{ $author->name }}</td>
-                            <td class="text-center">{{ $author->email }}</td>
-                            <td class="text-center">{{ $author->phone_number }}</td>
-                            <td class="text-center">{{ $author->address }}</td>
+                            <td class="text-center">{{ $publisher->name }}</td>
+                            <td class="text-center">{{ $publisher->email }}</td>
+                            <td class="text-center">{{ $publisher->phone_number }}</td>
+                            <td class="text-center">{{ $publisher->address }}</td>
                             <td class="text-center">
-                              <a href="#" @click="editData( {{ $author }} )" class="btn btn-warning">Edit</a>
-                              <a href="#" @click="deleteData( {{ $author->id }} )" class="btn btn-danger">Delete</a>
+                              <a href="#" @click="editData( {{ $publisher }} )" class="btn btn-warning">Edit</a>
+                              <a href="#" @click="deleteData( {{ $publisher->id }} )" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                         @endforeach
@@ -52,7 +49,7 @@
                 <div class="modal-content">
                   <form :action="actionUrl" method="POST" autocomplete="off">
                     <div class="modal-header">
-                      <h4 class="modal-title">Author</h4>
+                      <h4 class="modal-title">Publisher</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -98,56 +95,39 @@
 @endsection
 
 @section('js')
-<!-- DataTables  & Plugins -->
-<script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/jszip/jszip.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/pdfmake/pdfmake.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/pdfmake/vfs_fonts.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <script>
-$(function () {
-    $("#datatable").DataTable()
+  var controller = new Vue({
+    el: '#controller',
+    data: {
+      data: {},
+      actionUrl: '{{ url('publishers') }}',
+      editStatus: false,
+    },
+    mounted: function(){
+
+    },
+    methods: {
+      addData(){
+        this.data = {};
+        this.editStatus = false;
+        this.actionUrl = '{{ url('publishers') }}';
+        $('#modal-default').modal();
+      },
+      editData(data){
+        this.data = data;
+        this.editStatus = true;
+        this.actionUrl = '{{ url('publishers') }}'+'/'+data.id;
+        $('#modal-default').modal();
+      },
+      deleteData(id){
+        this.actionUrl = '{{ url('publishers') }}'+'/'+id;
+        if(confirm("Are you sure ?")){
+          axios.post(this.actionUrl, {_method: 'DELETE'}).then(response => {
+            location.reload();
+          });
+        }
+      }
+    }
   });
-
-  // var controller = new Vue({
-  //   el: '#controller',
-  //   data: {
-  //     data: {},
-  //     actionUrl: '{{ url('authors') }}',
-  //     editStatus: false,
-  //   },
-  //   mounted: function(){
-
-  //   },
-  //   methods: {
-  //     addData(){
-  //       this.data = {};
-  //       this.editStatus = false;
-  //       this.actionUrl = '{{ url('authors') }}';
-  //       $('#modal-default').modal();
-  //     },
-  //     editData(data){
-  //       this.data = data;
-  //       this.editStatus = true;
-  //       this.actionUrl = '{{ url('authors') }}'+'/'+data.id;
-  //       $('#modal-default').modal();
-  //     },
-  //     deleteData(id){
-  //       this.actionUrl = '{{ url('authors') }}'+'/'+id;
-  //       if(confirm("Are you sure ?")){
-  //         axios.post(this.actionUrl, {_method: 'DELETE'}).then(response => {
-  //           location.reload();
-  //         });
-  //       }
-  //     }
-  //   }
-  // });
 </script>
 @endsection
