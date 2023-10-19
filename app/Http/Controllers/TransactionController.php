@@ -7,16 +7,53 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        if(auth()->user()->can('index peminjaman')){
-            return view('admin.transaction');
-        } else {
-            return abort('403');
+        // if(auth()->user()->can('index peminjaman')){
+        //     return view('admin.transaction');
+        // } else {
+        //     return abort('403');
+        // }
+        return view('admin.transaction');
+    }
+
+    public function api(Request $request)
+    {
+        if($request->status){
+            $transactions = Transaction::where('status',$request->status);
+        }else {
+            $transactions = Transaction::query();
         }
+
+        if($request->date_start){
+            $transactions = Transaction::whereDate('date_start', $request->date_start);
+        }
+
+        $transactions
+            // ->with(['transactionDetail.book'])
+            ->join('members', 'members.id', 'transactions.member_id')
+            ->selectRaw('datediff(date_end, date_start) as lama_pinjam, transactions.*, members.name')
+            ->get();
+        
+        $datatables = datatables()->of($transactions)
+        ->addColumn('status_name', function ($transaction) {
+            if($transaction->status == 1){
+                return 'Belum Dikembalikan';
+            } elseif($transaction->status == 2) {
+                return 'Sudah Dikembalikan';
+            }
+        })
+        ->addIndexColumn();
+
+        return $datatables->make(true);
     }
 
     /**
