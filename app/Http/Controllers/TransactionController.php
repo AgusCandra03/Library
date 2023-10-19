@@ -12,7 +12,11 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        if(auth()->user()->can('index peminjaman')){
+            return view('admin.transaction');
+        } else {
+            return abort('403');
+        }
     }
 
     /**

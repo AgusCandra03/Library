@@ -21,6 +21,8 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/test_spatie', [App\Http\Controllers\HomeController::class, 'test_spatie']);
+
 Route::get('/catalogs', [App\Http\Controllers\CatalogController::class, 'index']);
 Route::get('/catalogs/create', [App\Http\Controllers\CatalogController::class, 'create']);
 Route::post('/catalogs', [App\Http\Controllers\CatalogController::class, 'store']);
