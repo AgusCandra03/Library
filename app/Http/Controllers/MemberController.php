@@ -17,8 +17,29 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $member = Member::with('user')->get();
-        return view('admin.member.index');
+        $members = Member::all();
+        return view('admin.member', compact('members'));
+    }
+
+    public function api(Request $request)
+    {
+        if($request->gender){
+            $members = Member::where('gender', $request->gender)->get();
+        }else {
+            $members = Member::all();
+        }
+
+        $datatables = datatables()->of($members)
+        ->addColumn('jk', function ($member) {
+            if($member->gender == 'P'){
+                return 'Perempuan';
+            } else if($member->gender == 'L'){
+                return 'Laki - laki';
+            }
+        })
+        ->addIndexColumn();
+
+        return $datatables->make(true);
     }
 
     /**
@@ -34,7 +55,17 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'name' => ['required'],
+            'gender' => ['required'],
+            'phone_number' => ['required'],
+            'address' => ['required'],
+            'email' => ['required'],
+        ]);
+
+        Member::create($request->all());
+
+        return redirect('members');
     }
 
     /**
@@ -58,7 +89,17 @@ class MemberController extends Controller
      */
     public function update(Request $request, Member $member)
     {
-        //
+        $this->validate($request,[
+            'name' => ['required'],
+            'gender' => ['required'],
+            'phone_number' => ['required'],
+            'address' => ['required'],
+            'email' => ['required'],
+        ]);
+
+        $member->update($request->all());
+
+        return redirect('members');
     }
 
     /**
@@ -66,6 +107,6 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
-        //
+        $member->delete();
     }
 }
